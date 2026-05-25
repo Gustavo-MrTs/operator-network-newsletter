@@ -7,12 +7,18 @@
   <meta name="description" content="Sinais diários da nova economia da I.A. Sistemas, agentes e automações explicados na prática. Entre antes da maioria." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700;1,800&display=swap" rel="stylesheet" />
   <style>
+    /* ── Font stack: Inter via Google Fonts → Segoe UI → system-ui → sans-serif ── */
+    :root {
+      --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      font-family: var(--font);
     }
 
     html, body {
@@ -72,6 +78,7 @@
 
     /* H1 */
     .title {
+      font-family: var(--font);
       font-size: clamp(2rem, 5vw, 2.625rem);
       font-weight: 800;
       line-height: 1.18;
@@ -81,11 +88,13 @@
     }
 
     .title em {
+      font-family: var(--font);
       font-style: italic;
     }
 
     /* Subtitle */
     .subtitle {
+      font-family: var(--font);
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.6;
@@ -95,6 +104,7 @@
     }
 
     .subtitle strong {
+      font-family: var(--font);
       font-weight: 700;
       color: #231f20;
     }
@@ -253,6 +263,7 @@
     }
 
     .title2 {
+      font-family: var(--font);
       font-size: clamp(2rem, 5vw, 2.75rem);
       font-weight: 800;
       line-height: 1.15;
@@ -262,10 +273,12 @@
     }
 
     .title2 em {
+      font-family: var(--font);
       font-style: italic;
     }
 
     .subtitle2 {
+      font-family: var(--font);
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.6;
