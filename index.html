@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operator Network — Entre antes da maioria</title>
+  <meta name="description" content="Sinais diários da nova economia da I.A. Sistemas, agentes e automações explicados na prática. Entre antes da maioria." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden; /* hide scrollbar during slide */
+    }
+
+    /* ── Slide wrapper: two panels side by side ── */
+    .slide-wrapper {
+      display: flex;
+      width: 200vw;
+      height: 100vh;
+      transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+      will-change: transform;
+    }
+
+    .slide-wrapper.slide-to-page2 {
+      transform: translateX(-50%);
+    }
+
+    /* ── Each page panel ── */
+    .page {
+      width: 50%; /* = 100vw */
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 24px;
+      overflow-y: auto;
+    }
+
+    /* ═══════════════════════════════════════
+       PAGE 1 — Landing
+    ═══════════════════════════════════════ */
+    #page1 {
+      background-color: #f7f7f7;
+      color: #231f20;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 560px;
+      gap: 40px;
+    }
+
+    /* Logo */
+    .logo-wrapper img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* H1 */
+    .title {
+      font-size: clamp(2rem, 5vw, 2.625rem);
+      font-weight: 800;
+      line-height: 1.18;
+      text-align: center;
+      letter-spacing: -0.02em;
+      color: #231f20;
+    }
+
+    .title em {
+      font-style: italic;
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.6;
+      text-align: center;
+      color: #231f20;
+      opacity: 0.75;
+    }
+
+    .subtitle strong {
+      font-weight: 700;
+      color: #231f20;
+    }
+
+    /* Capture row */
+    .capture-area {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .input-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 17px;
+      height: 17px;
+      color: #aaa;
+      pointer-events: none;
+    }
+
+    .input-email {
+      width: 100%;
+      height: 48px;
+      padding: 0 16px 0 42px;
+      background: #ffffff;
+      border: 1px solid #d8d8d8;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      color: #231f20;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-email::placeholder { color: #b0b0b0; }
+
+    .input-email:focus {
+      border-color: #231f20;
+      box-shadow: 0 0 0 3px rgba(35,31,32,0.08);
+    }
+
+    .btn-join {
+      height: 48px;
+      padding: 0 22px;
+      background-color: #231f20;
+      color: #f7f7f7;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+      transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-join:hover {
+      background-color: #111;
+      box-shadow: 0 4px 16px rgba(35,31,32,0.18);
+      transform: translateY(-1px);
+    }
+
+    .btn-join:active { transform: translateY(0); box-shadow: none; }
+
+    /* Benefits list */
+    .benefits-list {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      list-style: none;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: #231f20;
+      line-height: 1.5;
+    }
+
+    .benefit-item:not(:last-child) {
+      border-bottom: 1px solid #e3e3e3;
+    }
+
+    .benefit-bullet {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      background-color: #ebebeb;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .benefit-bullet svg {
+      width: 14px;
+      height: 14px;
+      color: #888;
+    }
+
+    /* Footer */
+    .footer-text {
+      font-size: 0.8rem;
+      font-weight: 700;
+      font-style: italic;
+      text-align: center;
+      line-height: 1.7;
+      color: #231f20;
+      opacity: 0.55;
+      letter-spacing: 0.01em;
+    }
+
+    /* ═══════════════════════════════════════
+       PAGE 2 — Confirmation
+    ═══════════════════════════════════════ */
+    #page2 {
+      background-color: #f8f9fa;
+      color: #231f20;
+    }
+
+    .container2 {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+      gap: 44px;
+      /* Page 2 starts slightly shifted right for the reveal effect */
+      opacity: 0;
+      transform: translateX(30px);
+      transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+    }
+
+    /* When page 2 is active, animate content in */
+    .slide-wrapper.slide-to-page2 .container2 {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .title2 {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.15;
+      text-align: center;
+      letter-spacing: -0.02em;
+      color: #231f20;
+    }
+
+    .title2 em {
+      font-style: italic;
+    }
+
+    .subtitle2 {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.6;
+      text-align: center;
+      color: #231f20;
+      opacity: 0.72;
+    }
+
+    /* Discord CTA button — image as link */
+    .discord-btn {
+      display: inline-block;
+      text-decoration: none;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.25s ease;
+      outline: none;
+    }
+
+    .discord-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 12px 40px rgba(35, 31, 32, 0.18);
+    }
+
+    .discord-btn:active {
+      transform: scale(1.02);
+      box-shadow: 0 4px 16px rgba(35, 31, 32, 0.12);
+    }
+
+    .discord-btn:focus-visible {
+      box-shadow: 0 0 0 4px rgba(35,31,32,0.15);
+    }
+
+    .discord-btn img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      display: block;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide-wrapper" id="slideWrapper">
+
+    <!-- ═══════════════════════════
+         PAGE 1 — Landing
+    ════════════════════════════ -->
+    <section class="page" id="page1" aria-label="Landing page">
+      <main class="container">
+
+        <!-- 1. Logo -->
+        <div class="logo-wrapper">
+          <img src="logo-estrela.png" alt="Operator Network" width="48" height="48" />
+        </div>
+
+        <!-- 2. Título -->
+        <h1 class="title">
+          A I.A <em>não</em> vai te <em>substituir</em>.<br />
+          Pessoas usando I.A vão.
+        </h1>
+
+        <!-- 3. Subtítulo -->
+        <p class="subtitle">
+          Um sistema para pessoas que querem operar<br />
+          na nova economia <strong>antes da maioria</strong>.
+        </p>
+
+        <!-- 4. Captura -->
+        <div class="capture-area">
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M2 7l8 5 8-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <input
+              type="email"
+              id="email-input"
+              class="input-email"
+              placeholder="Seu melhor email"
+              autocomplete="email"
+              aria-label="Seu melhor email"
+            />
+          </div>
+          <button class="btn-join" id="join-btn" type="button">
+            Se junte a nós
+          </button>
+        </div>
+
+        <!-- 5. Benefícios -->
+        <ul class="benefits-list" aria-label="Benefícios">
+          <li class="benefit-item">
+            <div class="benefit-bullet" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2 11l3-4 3 3 3-5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span>Sinais diários da nova economia da I.A</span>
+          </li>
+          <li class="benefit-item">
+            <div class="benefit-bullet" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="4" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M6 2v2M10 2v2M6 12v2M10 12v2M2 6h2M2 10h2M12 6h2M12 10h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span>Sistemas operacionais, agentes e automações explicados na prática</span>
+          </li>
+          <li class="benefit-item">
+            <div class="benefit-bullet" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="13" cy="4" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="3" cy="4" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="3" cy="12" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+                <circle cx="13" cy="12" r="1.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M6.5 6.5L4.5 5M9.5 6.5L11.5 5M6.5 9.5L4.5 11M9.5 9.5L11.5 11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span>Acesso ao Operator Network privado</span>
+          </li>
+          <li class="benefit-item">
+            <div class="benefit-bullet" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 2L4 9h4l-1 5 5-7H8l1-5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span>Workflows, ferramentas e AI systems antes da maioria</span>
+          </li>
+        </ul>
+
+        <!-- 6. Rodapé -->
+        <footer>
+          <p class="footer-text">
+            O futuro será operado por sistemas.<br />
+            Você está entrando cedo.
+          </p>
+        </footer>
+
+      </main>
+    </section>
+
+    <!-- ═══════════════════════════
+         PAGE 2 — Confirmação
+    ════════════════════════════ -->
+    <section class="page" id="page2" aria-label="Página de confirmação">
+      <div class="container2">
+
+        <!-- 1. Logo -->
+        <div class="logo-wrapper">
+          <img src="logo-estrela.png" alt="Operator Network" width="48" height="48" />
+        </div>
+
+        <!-- 2. Título -->
+        <h1 class="title2">
+          Acesso <em>Confirmado</em>.
+        </h1>
+
+        <!-- 3. Subtítulo -->
+        <p class="subtitle2">
+          Seu próximo passo é o nosso QG.<br />
+          Junte-se ao Network.
+        </p>
+
+        <!-- 4. Botão Discord (imagem clicável) -->
+        <a
+          href="https://discord.gg/T33PwJUyNq"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="discord-btn"
+          id="discord-btn"
+          aria-label="Entrar no servidor do Discord"
+        >
+          <img src="discord_icon.png" alt="Entrar no Discord" width="120" height="120" />
+        </a>
+
+        <!-- 5. Rodapé -->
+        <footer>
+          <p class="footer-text">
+            O futuro será operado por sistemas.<br />
+            Você está entrando cedo.
+          </p>
+        </footer>
+
+      </div>
+    </section>
+
+  </div><!-- /slide-wrapper -->
+
+  <script>
+    const joinBtn = document.getElementById('join-btn');
+    const wrapper = document.getElementById('slideWrapper');
+
+    joinBtn.addEventListener('click', () => {
+      wrapper.classList.add('slide-to-page2');
+    });
+  </script>
+</body>
+</html>
