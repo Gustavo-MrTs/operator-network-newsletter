@@ -884,37 +884,24 @@
     /* ════════════════════════════════
        SUPABASE INSERT
     ════════════════════════════════ */
-    function generateUUID() {
-      if (typeof crypto !== 'undefined' && crypto.randomUUID) {
-        return crypto.randomUUID();
-      }
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-        const r = Math.random() * 16 | 0;
-        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-      });
-    }
-
     async function submitToSupabase() {
-      const userId = generateUUID();
-
       try {
         const { error } = await sb
           .from('quiz_submissions')
-          .insert({
-            user_id:      userId,
-            quiz_version: 'v1',
-            answers:      answers,
-          });
+          .insert([
+            {
+              quiz_version: 'v1',
+              answers:      answers,
+            }
+          ]);
 
         if (error) {
-          console.warn('[Supabase] Insert error:', error.message);
-        } else {
-          console.log('[Supabase] Quiz salvo com sucesso. user_id:', userId);
+          console.error('Erro detalhado do Supabase:', error);
         }
       } catch (err) {
-        console.warn('[Supabase] Unexpected error:', err);
+        console.error('Erro na requisição:', err);
       } finally {
-        // Always transition to confirmation, even on error
+        // A transição para a tela final ocorre independente do sucesso/erro do banco
         setTimeout(() => slideTo(2), 400);
       }
     }
