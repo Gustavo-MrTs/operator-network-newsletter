@@ -788,12 +788,14 @@
     ════════════════════════════════ */
     let currentQ = 0;
     const answers = {};
+    let userId = null; // preenchido após supabase.auth.signUp
 
     /* ════════════════════════════════
        DOM REFS
     ════════════════════════════════ */
     const wrapper         = document.getElementById('slideWrapper');
     const joinBtn         = document.getElementById('join-btn');
+    const emailInput      = document.getElementById('email-input');
     const questionWrapper = document.getElementById('questionWrapper');
     const questionCounter = document.getElementById('questionCounter');
     const questionText    = document.getElementById('questionText');
@@ -882,6 +884,53 @@
     }
 
     /* ════════════════════════════════
+       SUPABASE AUTH — SIGNUP
+    ════════════════════════════════ */
+    async function handleJoin() {
+      const email = emailInput.value.trim();
+
+      // Validação básica de e-mail
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        emailInput.focus();
+        emailInput.style.borderColor = '#ef4444';
+        emailInput.style.boxShadow   = '0 0 0 3px rgba(239,68,68,0.12)';
+        setTimeout(() => {
+          emailInput.style.borderColor = '';
+          emailInput.style.boxShadow   = '';
+        }, 2000);
+        return;
+      }
+
+      // Loading state no botão
+      joinBtn.disabled    = true;
+      joinBtn.textContent = 'Entrando…';
+
+      try {
+        const { data, error } = await sb.auth.signUp({
+          email:    email,
+          password: crypto.randomUUID() + 'A1!',
+        });
+
+        if (error) {
+          console.error('Erro no signUp:', error.message);
+        }
+
+        if (data?.user) {
+          userId = data.user.id;
+          console.log('[Auth] Usuário criado:', userId);
+        }
+      } catch (err) {
+        console.error('Erro na autenticação:', err);
+      } finally {
+        // Avança para o quiz independente do resultado do Auth
+        joinBtn.disabled    = false;
+        joinBtn.textContent = 'Se junte a nós';
+        renderQuestion(0);
+        slideTo(1);
+      }
+    }
+
+    /* ════════════════════════════════
        SUPABASE INSERT
     ════════════════════════════════ */
     async function submitToSupabase() {
@@ -890,6 +939,7 @@
           .from('quiz_submissions')
           .insert([
             {
+              user_id:      userId,      // ID real vindo do Auth
               quiz_version: 'v1',
               answers:      answers,
             }
@@ -909,10 +959,7 @@
     /* ════════════════════════════════
        INIT
     ════════════════════════════════ */
-    joinBtn.addEventListener('click', () => {
-      renderQuestion(0);
-      slideTo(1);
-    });
+    joinBtn.addEventListener('click', handleJoin);
   </script>
 </body>
 </html>
