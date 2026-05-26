@@ -889,8 +889,8 @@
     async function handleJoin() {
       const email = emailInput.value.trim();
 
-      // Validação básica de e-mail
-      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      if (!email) {
+        console.error('Email vazio');
         emailInput.focus();
         emailInput.style.borderColor = '#ef4444';
         emailInput.style.boxShadow   = '0 0 0 3px rgba(239,68,68,0.12)';
@@ -901,6 +901,9 @@
         return;
       }
 
+      // Senha que atende requisitos do Supabase (maiúscula, número, símbolo, minúsculas)
+      const senhaSegura = Math.random().toString(36).slice(-8) + 'Xk9!@';
+
       // Loading state no botão
       joinBtn.disabled    = true;
       joinBtn.textContent = 'Entrando…';
@@ -908,25 +911,29 @@
       try {
         const { data, error } = await sb.auth.signUp({
           email:    email,
-          password: crypto.randomUUID() + 'A1!',
+          password: senhaSegura,
         });
 
         if (error) {
-          console.error('Erro no signUp:', error.message);
+          // EXIBE O ERRO E TRAVA A TRANSIÇÃO
+          console.error('Erro detalhado no Supabase Auth:', error.message);
+          alert('Erro no cadastro: ' + error.message);
+          return;
         }
 
-        if (data?.user) {
+        if (data.user) {
+          // SUCESSO: salva o ID e SÓ ENTÃO libera a transição
           userId = data.user.id;
           console.log('[Auth] Usuário criado:', userId);
+          renderQuestion(0);
+          slideTo(1);
         }
       } catch (err) {
-        console.error('Erro na autenticação:', err);
+        console.error('Erro de requisição (Network/CORS):', err);
       } finally {
-        // Avança para o quiz independente do resultado do Auth
+        // Sempre restaura o botão (mesmo em caso de erro ou return antecipado)
         joinBtn.disabled    = false;
         joinBtn.textContent = 'Se junte a nós';
-        renderQuestion(0);
-        slideTo(1);
       }
     }
 
