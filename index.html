@@ -8,8 +8,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700;1,800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    /* ── Font stack: Inter via Google Fonts → Segoe UI → system-ui → sans-serif ── */
+    /* ══════════════════════════════════════════
+       GLOBAL
+    ══════════════════════════════════════════ */
     :root {
       --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
@@ -23,26 +26,22 @@
 
     html, body {
       height: 100%;
-      overflow: hidden; /* hide scrollbar during slide */
+      overflow: hidden;
     }
 
-    /* ── Slide wrapper: two panels side by side ── */
+    /* ── 3-panel slide wrapper ── */
     .slide-wrapper {
       display: flex;
-      width: 200vw;
+      width: 300vw;
       height: 100vh;
       transition: transform 0.65s cubic-bezier(0.77, 0, 0.175, 1);
       will-change: transform;
     }
 
-    .slide-wrapper.slide-to-page2 {
-      transform: translateX(-50%);
-    }
-
-    /* ── Each page panel ── */
     .page {
-      width: 50%; /* = 100vw */
+      width: 100vw;
       min-height: 100vh;
+      flex-shrink: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -51,9 +50,10 @@
       overflow-y: auto;
     }
 
-    /* ═══════════════════════════════════════
-       PAGE 1 — Landing
-    ═══════════════════════════════════════ */
+
+    /* ══════════════════════════════════════════
+       PAGE 1 — LANDING
+    ══════════════════════════════════════════ */
     #page1 {
       background-color: #f7f7f7;
       color: #231f20;
@@ -68,7 +68,6 @@
       gap: 40px;
     }
 
-    /* Logo */
     .logo-wrapper img {
       width: 48px;
       height: 48px;
@@ -76,7 +75,6 @@
       display: block;
     }
 
-    /* H1 */
     .title {
       font-family: var(--font);
       font-size: clamp(2rem, 5vw, 2.625rem);
@@ -92,7 +90,6 @@
       font-style: italic;
     }
 
-    /* Subtitle */
     .subtitle {
       font-family: var(--font);
       font-size: 1rem;
@@ -109,7 +106,6 @@
       color: #231f20;
     }
 
-    /* Capture row */
     .capture-area {
       display: flex;
       flex-direction: row;
@@ -143,7 +139,7 @@
       background: #ffffff;
       border: 1px solid #d8d8d8;
       border-radius: 10px;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font);
       font-size: 0.9rem;
       color: #231f20;
       outline: none;
@@ -154,7 +150,7 @@
 
     .input-email:focus {
       border-color: #231f20;
-      box-shadow: 0 0 0 3px rgba(35,31,32,0.08);
+      box-shadow: 0 0 0 3px rgba(35, 31, 32, 0.08);
     }
 
     .btn-join {
@@ -164,7 +160,7 @@
       color: #f7f7f7;
       border: none;
       border-radius: 10px;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--font);
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
@@ -176,13 +172,12 @@
 
     .btn-join:hover {
       background-color: #111;
-      box-shadow: 0 4px 16px rgba(35,31,32,0.18);
+      box-shadow: 0 4px 16px rgba(35, 31, 32, 0.18);
       transform: translateY(-1px);
     }
 
     .btn-join:active { transform: translateY(0); box-shadow: none; }
 
-    /* Benefits list */
     .benefits-list {
       display: flex;
       flex-direction: column;
@@ -223,8 +218,8 @@
       color: #888;
     }
 
-    /* Footer */
     .footer-text {
+      font-family: var(--font);
       font-size: 0.8rem;
       font-weight: 700;
       font-style: italic;
@@ -235,10 +230,205 @@
       letter-spacing: 0.01em;
     }
 
-    /* ═══════════════════════════════════════
-       PAGE 2 — Confirmation
-    ═══════════════════════════════════════ */
-    #page2 {
+
+    /* ══════════════════════════════════════════
+       PAGE 2 — QUIZ
+    ══════════════════════════════════════════ */
+    #page-quiz {
+      background-color: #f8f9fa;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated background blobs */
+    #page-quiz::before,
+    #page-quiz::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(72px);
+    }
+
+    #page-quiz::before {
+      width: 640px;
+      height: 640px;
+      background: radial-gradient(circle, rgba(170, 185, 255, 0.22) 0%, transparent 70%);
+      top: -220px;
+      left: -180px;
+      animation: blob1 20s ease-in-out infinite alternate;
+    }
+
+    #page-quiz::after {
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, rgba(190, 255, 210, 0.18) 0%, transparent 70%);
+      bottom: -160px;
+      right: -120px;
+      animation: blob2 16s ease-in-out infinite alternate;
+    }
+
+    @keyframes blob1 {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(120px, 80px) scale(1.15); }
+      100% { transform: translate(200px, 140px) scale(1.05); }
+    }
+
+    @keyframes blob2 {
+      0%   { transform: translate(0, 0) scale(1); }
+      50%  { transform: translate(-80px, -120px) scale(1.1); }
+      100% { transform: translate(-160px, -200px) scale(1.2); }
+    }
+
+    /* Quiz container */
+    .quiz-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .progress-segment {
+      flex: 1;
+      height: 3px;
+      border-radius: 99px;
+      background-color: #E5E7EB;
+      transition: background-color 0.35s ease;
+    }
+
+    .progress-segment.filled {
+      background-color: #000000;
+    }
+
+    /* Question & options wrapper (fade animation) */
+    .question-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .question-wrapper.fading {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .question-counter {
+      font-family: var(--font);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #9CA3AF;
+      text-align: center;
+    }
+
+    .question-text {
+      font-family: var(--font);
+      font-size: clamp(1.3rem, 3.2vw, 1.75rem);
+      font-weight: 700;
+      color: #000000;
+      text-align: center;
+      line-height: 1.28;
+      letter-spacing: -0.02em;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      width: 100%;
+      padding: 14px 18px;
+      background: #ffffff;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #111111;
+      text-align: left;
+      cursor: pointer;
+      transition:
+        background-color 0.15s ease,
+        color 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.12s ease,
+        box-shadow 0.15s ease;
+    }
+
+    .option-btn:hover {
+      background-color: #000000;
+      color: #ffffff;
+      border-color: #000000;
+      transform: translateX(5px);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .option-btn:active {
+      transform: translateX(3px);
+      box-shadow: none;
+    }
+
+    .option-btn:disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+
+    /* Loading state */
+    .quiz-loading {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    .quiz-loading p {
+      font-family: var(--font);
+      font-size: 0.9rem;
+      color: #6B7280;
+      letter-spacing: 0.01em;
+    }
+
+    .loading-dots {
+      display: flex;
+      gap: 7px;
+    }
+
+    .loading-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background-color: #000;
+      animation: dotPulse 1.2s ease-in-out infinite;
+    }
+
+    .loading-dot:nth-child(2) { animation-delay: 0.18s; }
+    .loading-dot:nth-child(3) { animation-delay: 0.36s; }
+
+    @keyframes dotPulse {
+      0%, 80%, 100% { transform: scale(0.65); opacity: 0.35; }
+      40%           { transform: scale(1);    opacity: 1; }
+    }
+
+
+    /* ══════════════════════════════════════════
+       PAGE 3 — CONFIRMATION
+    ══════════════════════════════════════════ */
+    #page3 {
       background-color: #f8f9fa;
       color: #231f20;
     }
@@ -250,14 +440,12 @@
       width: 100%;
       max-width: 480px;
       gap: 44px;
-      /* Page 2 starts slightly shifted right for the reveal effect */
       opacity: 0;
       transform: translateX(30px);
       transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
     }
 
-    /* When page 2 is active, animate content in */
-    .slide-wrapper.slide-to-page2 .container2 {
+    .container2.visible {
       opacity: 1;
       transform: translateX(0);
     }
@@ -287,14 +475,14 @@
       opacity: 0.72;
     }
 
-    /* Discord CTA button — image as link */
     .discord-btn {
       display: inline-block;
       text-decoration: none;
       cursor: pointer;
       border-radius: 20px;
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  box-shadow 0.25s ease;
+      transition:
+        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.25s ease;
       outline: none;
     }
 
@@ -309,7 +497,7 @@
     }
 
     .discord-btn:focus-visible {
-      box-shadow: 0 0 0 4px rgba(35,31,32,0.15);
+      box-shadow: 0 0 0 4px rgba(35, 31, 32, 0.15);
     }
 
     .discord-btn img {
@@ -325,33 +513,33 @@
 
   <div class="slide-wrapper" id="slideWrapper">
 
-    <!-- ═══════════════════════════
-         PAGE 1 — Landing
-    ════════════════════════════ -->
+    <!-- ══════════════════════════════
+         PAGE 1 — LANDING
+    ══════════════════════════════ -->
     <section class="page" id="page1" aria-label="Landing page">
       <main class="container">
 
-        <!-- 1. Logo -->
+        <!-- Logo -->
         <div class="logo-wrapper">
           <img src="logo-estrela.png" alt="Operator Network" width="48" height="48" />
         </div>
 
-        <!-- 2. Título -->
+        <!-- H1 -->
         <h1 class="title">
           A I.A <em>não</em> vai te <em>substituir</em>.<br />
           Pessoas usando I.A vão.
         </h1>
 
-        <!-- 3. Subtítulo -->
+        <!-- Subtítulo -->
         <p class="subtitle">
           Um sistema para pessoas que querem operar<br />
           na nova economia <strong>antes da maioria</strong>.
         </p>
 
-        <!-- 4. Captura -->
+        <!-- Captura -->
         <div class="capture-area">
           <div class="input-wrapper">
-            <svg class="input-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <svg class="input-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <rect x="2" y="4" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
               <path d="M2 7l8 5 8-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -369,11 +557,11 @@
           </button>
         </div>
 
-        <!-- 5. Benefícios -->
+        <!-- Benefícios -->
         <ul class="benefits-list" aria-label="Benefícios">
           <li class="benefit-item">
             <div class="benefit-bullet" aria-hidden="true">
-              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 16 16" fill="none">
                 <path d="M2 11l3-4 3 3 3-5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
@@ -381,7 +569,7 @@
           </li>
           <li class="benefit-item">
             <div class="benefit-bullet" aria-hidden="true">
-              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 16 16" fill="none">
                 <rect x="4" y="4" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
                 <path d="M6 2v2M10 2v2M6 12v2M10 12v2M2 6h2M2 10h2M12 6h2M12 10h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
               </svg>
@@ -390,7 +578,7 @@
           </li>
           <li class="benefit-item">
             <div class="benefit-bullet" aria-hidden="true">
-              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 16 16" fill="none">
                 <circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/>
                 <circle cx="13" cy="4" r="1.5" stroke="currentColor" stroke-width="1.5"/>
                 <circle cx="3" cy="4" r="1.5" stroke="currentColor" stroke-width="1.5"/>
@@ -403,7 +591,7 @@
           </li>
           <li class="benefit-item">
             <div class="benefit-bullet" aria-hidden="true">
-              <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 16 16" fill="none">
                 <path d="M9 2L4 9h4l-1 5 5-7H8l1-5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
@@ -411,7 +599,7 @@
           </li>
         </ul>
 
-        <!-- 6. Rodapé -->
+        <!-- Rodapé -->
         <footer>
           <p class="footer-text">
             O futuro será operado por sistemas.<br />
@@ -422,29 +610,68 @@
       </main>
     </section>
 
-    <!-- ═══════════════════════════
-         PAGE 2 — Confirmação
-    ════════════════════════════ -->
-    <section class="page" id="page2" aria-label="Página de confirmação">
-      <div class="container2">
 
-        <!-- 1. Logo -->
+    <!-- ══════════════════════════════
+         PAGE 2 — QUIZ
+    ══════════════════════════════ -->
+    <section class="page" id="page-quiz" aria-label="Quiz de perfil">
+      <div class="quiz-container">
+
+        <!-- Barra de progresso (7 segmentos) -->
+        <div class="progress-bar" id="progressBar" role="progressbar" aria-label="Progresso do quiz">
+          <div class="progress-segment" id="seg-0"></div>
+          <div class="progress-segment" id="seg-1"></div>
+          <div class="progress-segment" id="seg-2"></div>
+          <div class="progress-segment" id="seg-3"></div>
+          <div class="progress-segment" id="seg-4"></div>
+          <div class="progress-segment" id="seg-5"></div>
+          <div class="progress-segment" id="seg-6"></div>
+        </div>
+
+        <!-- Pergunta + Opções -->
+        <div class="question-wrapper" id="questionWrapper">
+          <p class="question-counter" id="questionCounter">Pergunta 1 de 7</p>
+          <h2 class="question-text" id="questionText"></h2>
+          <div class="options-list" id="optionsList"></div>
+        </div>
+
+        <!-- Estado de carregamento (após última resposta) -->
+        <div class="quiz-loading" id="quizLoading">
+          <div class="loading-dots" aria-hidden="true">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+          </div>
+          <p>Salvando suas respostas…</p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ══════════════════════════════
+         PAGE 3 — CONFIRMAÇÃO
+    ══════════════════════════════ -->
+    <section class="page" id="page3" aria-label="Página de confirmação">
+      <div class="container2" id="container2">
+
+        <!-- Logo -->
         <div class="logo-wrapper">
           <img src="logo-estrela.png" alt="Operator Network" width="48" height="48" />
         </div>
 
-        <!-- 2. Título -->
+        <!-- H1 -->
         <h1 class="title2">
           Acesso <em>Confirmado</em>.
         </h1>
 
-        <!-- 3. Subtítulo -->
+        <!-- Subtítulo -->
         <p class="subtitle2">
           Seu próximo passo é o nosso QG.<br />
           Junte-se ao Network.
         </p>
 
-        <!-- 4. Botão Discord (imagem clicável) -->
+        <!-- Botão Discord -->
         <a
           href="https://discord.gg/T33PwJUyNq"
           target="_blank"
@@ -456,7 +683,7 @@
           <img src="discord_icon.png" alt="Entrar no Discord" width="120" height="120" />
         </a>
 
-        <!-- 5. Rodapé -->
+        <!-- Rodapé -->
         <footer>
           <p class="footer-text">
             O futuro será operado por sistemas.<br />
@@ -469,12 +696,235 @@
 
   </div><!-- /slide-wrapper -->
 
-  <script>
-    const joinBtn = document.getElementById('join-btn');
-    const wrapper = document.getElementById('slideWrapper');
 
+  <script>
+    /* ════════════════════════════════
+       SUPABASE
+    ════════════════════════════════ */
+    const { createClient } = supabase;
+    const sb = createClient(
+      'https://tguhcvjbwsdjhdqzbkju.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRndWhjdmpid3NkamhkcXpia2p1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk3NjU3MDEsImV4cCI6MjA5NTM0MTcwMX0.ZhvbxTIduLhRx7EVXUtmyqLOspnwb8GZxtjC2fzb-Vs'
+    );
+
+    /* ════════════════════════════════
+       QUIZ DATA
+    ════════════════════════════════ */
+    const questions = [
+      {
+        key: 'p1',
+        text: 'Qual frase descreve melhor você hoje com IA?',
+        options: [
+          { label: 'Ainda não comecei, mas sei que preciso',           value: 'nao_comecei' },
+          { label: 'Já mexo (ChatGPT, Make…) mas de forma solta',      value: 'solto'       },
+          { label: 'Já automatizo algumas coisas no meu dia',          value: 'automatizo'  },
+          { label: 'Construo sistemas e quero escalar',                 value: 'construo'   },
+        ]
+      },
+      {
+        key: 'p2',
+        text: 'Você tá construindo isso pra…?',
+        options: [
+          { label: 'Minha carreira / freela',  value: 'ctx_carreira'   },
+          { label: 'Meu próprio negócio',      value: 'ctx_negocio'    },
+          { label: 'Uma empresa onde trabalho', value: 'ctx_empresa'    },
+          { label: 'Ainda explorando',          value: 'ctx_explorando' },
+        ]
+      },
+      {
+        key: 'p3',
+        text: 'O que mais te trava agora?',
+        options: [
+          { label: 'Não sei por onde começar',          value: 'obj_inicio'     },
+          { label: 'Falta tempo',                        value: 'obj_tempo'      },
+          { label: 'A parte técnica me assusta',         value: 'obj_tecnica'    },
+          { label: 'Falta gente pra trocar e destravar', value: 'obj_comunidade' },
+        ]
+      },
+      {
+        key: 'p4',
+        text: 'Daqui a 12 meses, o que seria uma vitória real?',
+        options: [
+          { label: 'Dominar o básico e parar de ficar pra trás',     value: 'amb_fundamento' },
+          { label: 'Automatizar minha rotina e ganhar tempo',          value: 'amb_tempo'      },
+          { label: 'Botar meu negócio pra rodar no automático',       value: 'amb_escala'     },
+          { label: 'Viver e faturar com IA e automação',               value: 'amb_renda'      },
+        ]
+      },
+      {
+        key: 'p5',
+        text: 'Quanto tempo por semana você consegue dedicar?',
+        options: [
+          { label: 'Menos de 1h',                        value: 'ritmo_leve'    },
+          { label: '1 a 3h',                              value: 'ritmo_medio'   },
+          { label: '3 a 6h',                              value: 'ritmo_forte'   },
+          { label: '6h+ — é prioridade pra mim',          value: 'ritmo_intenso' },
+        ]
+      },
+      {
+        key: 'p6',
+        text: 'Você aprende melhor com…?',
+        options: [
+          { label: 'Passo a passo guiado',            value: 'apr_guiado'  },
+          { label: 'Ver um caso real funcionando',    value: 'apr_caso'    },
+          { label: 'Mão na massa direto',              value: 'apr_pratica' },
+          { label: 'Comunidade e troca',               value: 'apr_social'  },
+        ]
+      },
+      {
+        key: 'p7',
+        text: 'Se você tivesse um COO de IA amanhã, o que ele faria primeiro por você?',
+        options: [
+          { label: 'Cuidar do conteúdo e marketing',    value: 'coo_marketing' },
+          { label: 'Organizar operação e processos',    value: 'coo_operacao'  },
+          { label: 'Cuidar de vendas e leads',           value: 'coo_vendas'    },
+          { label: 'Gerenciar tudo e me dar relatórios', value: 'coo_gestao'    },
+        ]
+      },
+    ];
+
+    /* ════════════════════════════════
+       STATE
+    ════════════════════════════════ */
+    let currentQ = 0;
+    const answers = {};
+
+    /* ════════════════════════════════
+       DOM REFS
+    ════════════════════════════════ */
+    const wrapper         = document.getElementById('slideWrapper');
+    const joinBtn         = document.getElementById('join-btn');
+    const questionWrapper = document.getElementById('questionWrapper');
+    const questionCounter = document.getElementById('questionCounter');
+    const questionText    = document.getElementById('questionText');
+    const optionsList     = document.getElementById('optionsList');
+    const quizLoading     = document.getElementById('quizLoading');
+    const container2      = document.getElementById('container2');
+
+    /* ════════════════════════════════
+       SLIDE NAVIGATION
+    ════════════════════════════════ */
+    function slideTo(panelIndex) {
+      wrapper.style.transform = `translateX(-${panelIndex * 100}vw)`;
+
+      // Trigger confirmation content fade-in
+      if (panelIndex === 2) {
+        setTimeout(() => container2.classList.add('visible'), 350);
+      }
+    }
+
+    /* ════════════════════════════════
+       PROGRESS BAR
+    ════════════════════════════════ */
+    function updateProgress(index) {
+      for (let i = 0; i < 7; i++) {
+        const seg = document.getElementById(`seg-${i}`);
+        seg.classList.toggle('filled', i <= index);
+      }
+    }
+
+    /* ════════════════════════════════
+       RENDER QUESTION
+    ════════════════════════════════ */
+    function renderQuestion(index) {
+      const q = questions[index];
+      updateProgress(index);
+
+      questionCounter.textContent = `Pergunta ${index + 1} de 7`;
+      questionText.textContent    = q.text;
+
+      optionsList.innerHTML = '';
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className   = 'option-btn';
+        btn.textContent = opt.label;
+        btn.id          = `opt-${opt.value}`;
+        btn.addEventListener('click', () => handleAnswer(opt.value));
+        optionsList.appendChild(btn);
+      });
+    }
+
+    /* ════════════════════════════════
+       FADE TRANSITION HELPER
+    ════════════════════════════════ */
+    function fadeOut(callback) {
+      questionWrapper.classList.add('fading');
+      setTimeout(() => {
+        callback();
+        questionWrapper.classList.remove('fading');
+      }, 240);
+    }
+
+    /* ════════════════════════════════
+       HANDLE ANSWER
+    ════════════════════════════════ */
+    function handleAnswer(value) {
+      const q = questions[currentQ];
+      answers[q.key] = value;
+
+      // Disable all buttons to prevent double-click
+      optionsList.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+      if (currentQ === questions.length - 1) {
+        // Last question → show loading + submit
+        fadeOut(() => {
+          questionWrapper.style.display = 'none';
+          quizLoading.style.display    = 'flex';
+        });
+        submitToSupabase();
+      } else {
+        // Next question with fade
+        fadeOut(() => {
+          currentQ++;
+          renderQuestion(currentQ);
+        });
+      }
+    }
+
+    /* ════════════════════════════════
+       SUPABASE INSERT
+    ════════════════════════════════ */
+    function generateUUID() {
+      if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+        return crypto.randomUUID();
+      }
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+        const r = Math.random() * 16 | 0;
+        return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+      });
+    }
+
+    async function submitToSupabase() {
+      const userId = generateUUID();
+
+      try {
+        const { error } = await sb
+          .from('quiz_submissions')
+          .insert({
+            user_id:      userId,
+            quiz_version: 'v1',
+            answers:      answers,
+          });
+
+        if (error) {
+          console.warn('[Supabase] Insert error:', error.message);
+        } else {
+          console.log('[Supabase] Quiz salvo com sucesso. user_id:', userId);
+        }
+      } catch (err) {
+        console.warn('[Supabase] Unexpected error:', err);
+      } finally {
+        // Always transition to confirmation, even on error
+        setTimeout(() => slideTo(2), 400);
+      }
+    }
+
+    /* ════════════════════════════════
+       INIT
+    ════════════════════════════════ */
     joinBtn.addEventListener('click', () => {
-      wrapper.classList.add('slide-to-page2');
+      renderQuestion(0);
+      slideTo(1);
     });
   </script>
 </body>
