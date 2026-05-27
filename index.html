@@ -475,6 +475,19 @@
       opacity: 0.72;
     }
 
+    /* Subtítulo dinâmico de perfil (H3) */
+    .profile-subtitle {
+      font-family: var(--font);
+      font-size: 0.975rem;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.65;
+      text-align: center;
+      color: #231f20;
+      opacity: 0.65;
+      max-width: 400px;
+    }
+
     .discord-btn {
       display: inline-block;
       text-decoration: none;
@@ -660,16 +673,15 @@
           <img src="logo-estrela.png" alt="Operator Network" width="48" height="48" />
         </div>
 
-        <!-- H1 -->
-        <h1 class="title2">
+        <!-- H1 dinâmico: rótulo de identidade do perfil -->
+        <h1 class="title2" id="profile-title">
           Acesso <em>Confirmado</em>.
         </h1>
 
-        <!-- Subtítulo -->
-        <p class="subtitle2">
-          Seu próximo passo é o nosso QG.<br />
-          Junte-se ao Network.
-        </p>
+        <!-- Subtítulo dinâmico: frase espelho do perfil -->
+        <h3 class="profile-subtitle" id="profile-subtitle">
+          Seu próximo passo é o nosso QG.<br />Junte-se ao Network.
+        </h3>
 
         <!-- Botão Discord -->
         <a
@@ -804,13 +816,54 @@
     const container2      = document.getElementById('container2');
 
     /* ════════════════════════════════
+       PERFIL — RESOLVER + CONTEÚDO
+    ════════════════════════════════ */
+    const profileContent = {
+      explorador: {
+        title:    'Você é um(a) Explorador da Nova Economia.',
+        subtitle: 'Você está começando do zero, mas com o mapa certo. Seu primeiro sistema sai em menos de 15 minutos.',
+      },
+      operador_formacao: {
+        title:    'Você é um(a) Operador em Formação.',
+        subtitle: 'Hora de parar de brincar com IA. Vamos colocar método, estrutura e network na sua jornada.',
+      },
+      dono_operacao: {
+        title:    'Você é um(a) Dono de Operação.',
+        subtitle: 'Você tem o negócio, falta o sistema. Bora colocar sua operação para rodar no automático.',
+      },
+      construtor: {
+        title:    'Você é um(a) Construtor de Sistemas.',
+        subtitle: 'Você não veio aprender o básico. O foco aqui é profundidade, labs avançados e escala.',
+      },
+      agente_corporativo: {
+        title:    'Você é um(a) Agente Corporativo.',
+        subtitle: 'IA dentro da sua empresa, sem enrolação. Vamos estruturar a implementação para gerar eficiência real.',
+      },
+    };
+
+    function resolveProfile(ans) {
+      const p1 = ans.p1;
+      const p2 = ans.p2;
+      if (p2 === 'ctx_empresa')                                          return 'agente_corporativo';
+      if (p2 === 'ctx_negocio' && (p1 === 'automatizo' || p1 === 'construo')) return 'dono_operacao';
+      if (p1 === 'nao_comecei')                                          return 'explorador';
+      if (p1 === 'solto'       || p1 === 'automatizo')                   return 'operador_formacao';
+      if (p1 === 'construo')                                             return 'construtor';
+      return 'explorador'; // fallback
+    }
+
+    /* ════════════════════════════════
        SLIDE NAVIGATION
     ════════════════════════════════ */
     function slideTo(panelIndex) {
       wrapper.style.transform = `translateX(-${panelIndex * 100}vw)`;
 
-      // Trigger confirmation content fade-in
+      // Popula conteúdo dinâmico e dispara fade-in da confirmação
       if (panelIndex === 2) {
+        const perfil  = resolveProfile(answers);
+        const content = profileContent[perfil];
+        document.getElementById('profile-title').textContent    = content.title;
+        document.getElementById('profile-subtitle').textContent = content.subtitle;
         setTimeout(() => container2.classList.add('visible'), 350);
       }
     }
