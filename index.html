@@ -69,8 +69,8 @@
     }
 
     .logo-wrapper .logo-video {
-      width: 48px;
-      height: 48px;
+      width: 64px;
+      height: 64px;
       object-fit: contain;
       display: block;
       border-radius: 6px;
@@ -567,15 +567,15 @@
     <section class="page" id="page1" aria-label="Landing page">
       <main class="container">
 
-        <!-- Logo (GIF animado) -->
+        <!-- Logo (GIF animado — placeholder estático até ser ativado) -->
         <div class="logo-wrapper">
           <img
-            id="logo-video-1"
+            id="logo-gif-1"
             class="logo-video"
-            src="logoanima.gif"
+            src="logo-estrela.png"
             alt="Operator Network"
-            width="48"
-            height="48"
+            width="64"
+            height="64"
           />
         </div>
 
@@ -710,15 +710,15 @@
     <section class="page" id="page3" aria-label="Página de confirmação">
       <div class="container2" id="container2">
 
-        <!-- Logo (GIF animado) -->
+        <!-- Logo (GIF animado — placeholder estático até ser ativado) -->
         <div class="logo-wrapper">
           <img
-            id="logo-video-3"
+            id="logo-gif-3"
             class="logo-video"
-            src="logoanima.gif"
+            src="logo-estrela.png"
             alt="Operator Network"
-            width="48"
-            height="48"
+            width="64"
+            height="64"
           />
         </div>
 
@@ -926,7 +926,7 @@
         setTimeout(() => {
           container2.classList.add('visible');
           // Reinicia o GIF da logo na tela final
-          restartGif(logoGif3);
+          triggerGif(logoGif3, gifTimer3);
         }, 350);
       }
     }
@@ -1082,19 +1082,36 @@
     /* ════════════════════════════════
        INIT
     ════════════════════════════════ */
-    const logoGif1 = document.getElementById('logo-video-1');
-    const logoGif3 = document.getElementById('logo-video-3');
+    const logoGif1 = document.getElementById('logo-gif-1');
+    const logoGif3 = document.getElementById('logo-gif-3');
 
-    // Reinicia o GIF do zero (substitui src por si mesmo)
-    function restartGif(imgEl) {
-      const src = imgEl.src;
-      imgEl.src = '';
-      imgEl.src = src;
+    const GIF_SRC    = 'logoanima.gif';
+    const STATIC_SRC = 'logo-estrela.png';
+    const GIF_DURATION_MS = 3000; // ajuste se a animação for mais curta/longa
+
+    let gifTimer1 = null;
+    let gifTimer3 = null;
+
+    function triggerGif(imgEl, timerRef) {
+      // Cancela timer anterior se houver
+      if (timerRef) clearTimeout(timerRef);
+      // Força reload do GIF com cache-buster (joga do frame 1)
+      imgEl.src = GIF_SRC + '?t=' + Date.now();
+      // Após a duração, volta para a imagem estática
+      return setTimeout(() => { imgEl.src = STATIC_SRC; }, GIF_DURATION_MS);
     }
 
+    // Play automático na abertura
+    window.addEventListener('load', () => {
+      gifTimer1 = triggerGif(logoGif1, gifTimer1);
+    });
+
     // Replay no hover em ambas as logos
-    [logoGif1, logoGif3].forEach(img => {
-      img.addEventListener('mouseenter', () => restartGif(img));
+    logoGif1.addEventListener('mouseenter', () => {
+      gifTimer1 = triggerGif(logoGif1, gifTimer1);
+    });
+    logoGif3.addEventListener('mouseenter', () => {
+      gifTimer3 = triggerGif(logoGif3, gifTimer3);
     });
 
     joinBtn.addEventListener('click', handleJoin);
