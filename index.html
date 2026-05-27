@@ -488,6 +488,39 @@
       max-width: 400px;
     }
 
+    /* Badge de confirmação */
+    .confirmation-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 13px;
+      background-color: #ebebeb;
+      border-radius: 99px;
+      font-family: var(--font);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    .confirmation-badge .check {
+      width: 14px;
+      height: 14px;
+      background-color: #231f20;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .confirmation-badge .check svg {
+      width: 8px;
+      height: 8px;
+      color: #fff;
+    }
+
     .discord-btn {
       display: inline-block;
       text-decoration: none;
@@ -671,6 +704,16 @@
         <!-- Logo -->
         <div class="logo-wrapper">
           <img src="logo-estrela.png" alt="Operator Network" width="48" height="48" />
+        </div>
+
+        <!-- Badge de confirmação -->
+        <div class="confirmation-badge" aria-label="Status: Acesso Confirmado">
+          <span class="check" aria-hidden="true">
+            <svg viewBox="0 0 8 8" fill="none">
+              <path d="M1.5 4l2 2 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          Acesso Confirmado
         </div>
 
         <!-- H1 dinâmico: rótulo de identidade do perfil -->
