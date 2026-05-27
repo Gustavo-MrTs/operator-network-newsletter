@@ -567,18 +567,16 @@
     <section class="page" id="page1" aria-label="Landing page">
       <main class="container">
 
-        <!-- Logo (animão) -->
+        <!-- Logo (GIF animado) -->
         <div class="logo-wrapper">
-          <video
+          <img
             id="logo-video-1"
             class="logo-video"
-            src="[rumo]Logo animation.mp4"
+            src="logoanima.gif"
+            alt="Operator Network"
             width="48"
             height="48"
-            muted
-            playsinline
-            preload="auto"
-          ></video>
+          />
         </div>
 
         <!-- H1 -->
@@ -712,18 +710,16 @@
     <section class="page" id="page3" aria-label="Página de confirmação">
       <div class="container2" id="container2">
 
-        <!-- Logo (animão) -->
+        <!-- Logo (GIF animado) -->
         <div class="logo-wrapper">
-          <video
+          <img
             id="logo-video-3"
             class="logo-video"
-            src="[rumo]Logo animation.mp4"
+            src="logoanima.gif"
+            alt="Operator Network"
             width="48"
             height="48"
-            muted
-            playsinline
-            preload="auto"
-          ></video>
+          />
         </div>
 
         <!-- Badge de confirmação -->
@@ -929,8 +925,8 @@
         document.getElementById('profile-subtitle').textContent = content.subtitle;
         setTimeout(() => {
           container2.classList.add('visible');
-          // Play da logo na tela final
-          playLogo(logoVideo3);
+          // Reinicia o GIF da logo na tela final
+          restartGif(logoGif3);
         }, 350);
       }
     }
@@ -1086,20 +1082,19 @@
     /* ════════════════════════════════
        INIT
     ════════════════════════════════ */
-    const logoVideo1 = document.getElementById('logo-video-1');
-    const logoVideo3 = document.getElementById('logo-video-3');
+    const logoGif1 = document.getElementById('logo-video-1');
+    const logoGif3 = document.getElementById('logo-video-3');
 
-    function playLogo(videoEl) {
-      videoEl.currentTime = 0;
-      videoEl.play().catch(() => {}); // ignora autoplay policy silenciosamente
+    // Reinicia o GIF do zero (substitui src por si mesmo)
+    function restartGif(imgEl) {
+      const src = imgEl.src;
+      imgEl.src = '';
+      imgEl.src = src;
     }
 
-    // Play automático da logo na abertura do site
-    window.addEventListener('load', () => playLogo(logoVideo1));
-
     // Replay no hover em ambas as logos
-    [logoVideo1, logoVideo3].forEach(v => {
-      v.addEventListener('mouseenter', () => playLogo(v));
+    [logoGif1, logoGif3].forEach(img => {
+      img.addEventListener('mouseenter', () => restartGif(img));
     });
 
     joinBtn.addEventListener('click', handleJoin);
