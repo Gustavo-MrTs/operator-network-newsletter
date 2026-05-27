@@ -68,11 +68,13 @@
       gap: 40px;
     }
 
-    .logo-wrapper img {
+    .logo-wrapper .logo-video {
       width: 48px;
       height: 48px;
       object-fit: contain;
       display: block;
+      border-radius: 6px;
+      cursor: default;
     }
 
     .title {
@@ -565,9 +567,18 @@
     <section class="page" id="page1" aria-label="Landing page">
       <main class="container">
 
-        <!-- Logo -->
+        <!-- Logo (animão) -->
         <div class="logo-wrapper">
-          <img src="logo-estrela.png" alt="Operator Network" width="48" height="48" />
+          <video
+            id="logo-video-1"
+            class="logo-video"
+            src="[rumo]Logo animation.mp4"
+            width="48"
+            height="48"
+            muted
+            playsinline
+            preload="auto"
+          ></video>
         </div>
 
         <!-- H1 -->
@@ -701,9 +712,18 @@
     <section class="page" id="page3" aria-label="Página de confirmação">
       <div class="container2" id="container2">
 
-        <!-- Logo -->
+        <!-- Logo (animão) -->
         <div class="logo-wrapper">
-          <img src="logo-estrela.png" alt="Operator Network" width="48" height="48" />
+          <video
+            id="logo-video-3"
+            class="logo-video"
+            src="[rumo]Logo animation.mp4"
+            width="48"
+            height="48"
+            muted
+            playsinline
+            preload="auto"
+          ></video>
         </div>
 
         <!-- Badge de confirmação -->
@@ -907,7 +927,11 @@
         const content = profileContent[perfil];
         document.getElementById('profile-title').textContent    = content.title;
         document.getElementById('profile-subtitle').textContent = content.subtitle;
-        setTimeout(() => container2.classList.add('visible'), 350);
+        setTimeout(() => {
+          container2.classList.add('visible');
+          // Play da logo na tela final
+          playLogo(logoVideo3);
+        }, 350);
       }
     }
 
@@ -1062,6 +1086,22 @@
     /* ════════════════════════════════
        INIT
     ════════════════════════════════ */
+    const logoVideo1 = document.getElementById('logo-video-1');
+    const logoVideo3 = document.getElementById('logo-video-3');
+
+    function playLogo(videoEl) {
+      videoEl.currentTime = 0;
+      videoEl.play().catch(() => {}); // ignora autoplay policy silenciosamente
+    }
+
+    // Play automático da logo na abertura do site
+    window.addEventListener('load', () => playLogo(logoVideo1));
+
+    // Replay no hover em ambas as logos
+    [logoVideo1, logoVideo3].forEach(v => {
+      v.addEventListener('mouseenter', () => playLogo(v));
+    });
+
     joinBtn.addEventListener('click', handleJoin);
   </script>
 </body>
